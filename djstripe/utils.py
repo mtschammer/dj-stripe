@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.core.exceptions import ImproperlyConfigured
 from .models import Customer
+from .settings import CUSTOMER_RELATED_NAME
 
 ERROR_MSG = (
                 "The subscription_payment_required decorator requires the user"
@@ -22,3 +23,6 @@ def user_has_active_subscription(user):
     if created or not customer.has_active_subscription():
         return False
     return True
+
+def get_djstripe_customer(user):
+    return getattr(user, CUSTOMER_RELATED_NAME)

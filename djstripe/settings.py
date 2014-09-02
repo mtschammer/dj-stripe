@@ -69,6 +69,11 @@ TRIAL_PERIOD_FOR_USER_CALLBACK = getattr(
     "DJSTRIPE_TRIAL_PERIOD_FOR_USER_CALLBACK",
     None
 )
+CUSTOMER_RELATED_NAME = getattr(
+    settings,
+    "DJSTRIPE_CUSTOMER_RELATED_NAME",
+    "customer"
+)
 PLAN_LIST = []
 for p in PAYMENTS_PLANS:
     if PAYMENTS_PLANS[p].get("stripe_plan_id"):

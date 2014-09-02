@@ -31,6 +31,7 @@ from .settings import PRORATION_POLICY_FOR_UPGRADES
 from .settings import PY3
 from .settings import User
 from .sync import sync_customer
+from .utils import get_djstripe_customer
 
 
 class ChangeCardView(LoginRequiredMixin, PaymentsContextMixin, DetailView):
@@ -215,7 +216,7 @@ class ChangePlanView(LoginRequiredMixin,
 
     def post(self, request, *args, **kwargs):
         form = PlanForm(request.POST)
-        customer = request.user.customer
+        customer = get_djstripe_customer(request.user)
         if form.is_valid():
             try:
                 """
