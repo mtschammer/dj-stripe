@@ -2,6 +2,7 @@
 from __future__ import division
 
 from django.template import Library
+from djstripe.utils import get_djstripe_customer
 
 
 register = Library()
@@ -22,3 +23,8 @@ def djdiv(value, arg):
         except Exception:
             return ''
 division.is_safe = False
+
+
+@register.assignment_tag
+def get_djstripe_customer_tag(user):
+    return get_djstripe_customer(user)

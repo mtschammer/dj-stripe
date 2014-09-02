@@ -30,6 +30,7 @@ from .signals import subscription_made, cancelled, card_changed
 from .signals import webhook_processing_error
 from .settings import TRIAL_PERIOD_FOR_USER_CALLBACK
 from .settings import DEFAULT_PLAN
+from .settings import CUSTOMER_RELATED_NAME
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -320,7 +321,8 @@ class TransferChargeFee(TimeStampedModel):
 @python_2_unicode_compatible
 class Customer(StripeObject):
 
-    user = models.OneToOneField(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'), null=True)
+    user = models.OneToOneField(getattr(settings, 'AUTH_USER_MODEL', 'auth.User'), null=True,
+                                related_name=CUSTOMER_RELATED_NAME)
     card_fingerprint = models.CharField(max_length=200, blank=True)
     card_last_4 = models.CharField(max_length=4, blank=True)
     card_kind = models.CharField(max_length=50, blank=True)
@@ -550,7 +552,7 @@ class Customer(StripeObject):
         """
         if ("trial_period_days" in PAYMENTS_PLANS[plan]):
             trial_days = PAYMENTS_PLANS[plan]["trial_period_days"]
-        
+
         if trial_days:
             resp = cu.update_subscription(
                 plan=PAYMENTS_PLANS[plan]["stripe_plan_id"],
